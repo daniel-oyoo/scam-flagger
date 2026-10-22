@@ -1,23 +1,11 @@
-# Virtual environment
-venv/
-env/
-ENV/
 target/
 
 # Database
 *.db
 *.sqlite3
 
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-
 # Environment variables
 .env
-.venv
 
 # IDE
 .vscode/

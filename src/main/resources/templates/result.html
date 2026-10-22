@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base :: layout('Analysis Results', ~{::section})}">
+<section>
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4 class="mb-0">Analysis Results for: <span th:text="${website.url}"></span></h4>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <h2 class="display-4" th:classappend="${website.flagged} ? 'text-danger' : 'text-success'"
+                            th:text="${website.flagged} ? 'FLAGGED' : 'CLEAN'"></h2>
+                        <div class="progress mb-3" style="height: 30px;">
+                            <div class="progress-bar"
+                                 th:classappend="${website.riskScore >= 70} ? 'bg-danger' : (${website.riskScore >= 40} ? 'bg-warning' : 'bg-success')"
+                                 th:style="|width: ${website.riskScore}%|"
+                                 th:text="|Risk Score: ${website.riskScore}%|"></div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-warning" th:if="${!#lists.isEmpty(triggeredFlags)}">
+                        <h5>Triggered Risk Flags:</h5>
+                        <ul class="mb-0">
+                            <li th:each="flag : ${triggeredFlags}" th:text="${flag}"></li>
+                        </ul>
+                    </div>
+
+                    <div class="row text-center mt-4">
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6>Risk Level</h6>
+                                    <span class="badge fs-6"
+                                          th:classappend="${website.riskScore >= 70} ? 'bg-danger' : (${website.riskScore >= 40} ? 'bg-warning' : 'bg-success')"
+                                          th:text="${website.riskScore >= 70} ? 'High' : (${website.riskScore >= 40} ? 'Medium' : 'Low')"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6>Status</h6>
+                                    <span class="badge fs-6"
+                                          th:classappend="${website.flagged} ? 'bg-danger' : 'bg-success'"
+                                          th:text="${website.flagged} ? 'Flagged' : 'Clean'"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6>Last Checked</h6>
+                                    <small th:text="${website.lastChecked}"></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Community Reviews</h5>
+                </div>
+                <div class="card-body">
+                    <div th:if="${!#lists.isEmpty(reviews)}">
+                        <div class="border-bottom pb-3 mb-3" th:each="review : ${reviews}">
+                            <div class="d-flex justify-content-between">
+                                <strong th:text="${review.username}"></strong>
+                                <span class="text-warning">
+                                    <span th:each="star : ${#numbers.sequence(1, review.rating)}">⭐</span>
+                                </span>
+                            </div>
+                            <p class="mb-1" th:text="${review.comment}"></p>
+                            <small class="text-muted" th:text="${review.createdAt}"></small>
+                        </div>
+                    </div>
+                    <p class="text-muted" th:if="${#lists.isEmpty(reviews)}">
+                        No reviews yet. Be the first to share your experience!
+                    </p>
+
+                    <form method="post" th:action="@{/review}" class="mt-4">
+                        <input type="hidden" name="websiteId" th:value="${website.id}">
+                        <div class="mb-3">
+                            <label for="rating" class="form-label">Your Rating</label>
+                            <select id="rating" name="rating" class="form-select" required>
+                                <option value="1">⭐ - Poor</option>
+                                <option value="2">⭐⭐ - Fair</option>
+                                <option value="3">⭐⭐⭐ - Good</option>
+                                <option value="4">⭐⭐⭐⭐ - Very Good</option>
+                                <option value="5">⭐⭐⭐⭐⭐ - Excellent</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="comment" class="form-label">Your Review</label>
+                            <textarea id="comment" name="comment" class="form-control" rows="3"
+                                      maxlength="2000"
+                                      placeholder="Share your experience with this website..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit Review</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <a th:href="@{/check}" class="btn btn-outline-primary">Check Another Website</a>
+            </div>
+        </div>
+    </div>
+</section>
+</html>

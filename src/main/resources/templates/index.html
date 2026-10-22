@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base :: layout('Home', ~{::section})}">
+<section>
+    <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="display-4 mb-4">Scam Flagger</h1>
+            <p class="lead mb-4">Protect yourself from online investment scams and fraudulent websites</p>
+
+            <div class="row mt-5" th:unless="${loggedIn}">
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">New User?</h5>
+                            <p class="card-text">Create an account to start checking websites</p>
+                            <a th:href="@{/register}" class="btn btn-primary">Register</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">Returning User?</h5>
+                            <p class="card-text">Log in to access your account</p>
+                            <a th:href="@{/login}" class="btn btn-outline-primary">Login</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mt-4" th:if="${loggedIn}">
+                <div class="card-body">
+                    <h5 class="card-title">Ready to Check a Website?</h5>
+                    <p class="card-text">Enter a URL to analyze it for scam indicators</p>
+                    <a th:href="@{/check}" class="btn btn-primary btn-lg">Check Website Now</a>
+                </div>
+            </div>
+
+            <div class="row mt-5">
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <h4>Automated Analysis</h4>
+                        <p>Advanced algorithms scan for scam indicators and red flags</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <h4>Community Reviews</h4>
+                        <p>Read and contribute to community feedback on websites</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <h4>Real-time Results</h4>
+                        <p>Get instant risk assessments with detailed explanations</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</html>

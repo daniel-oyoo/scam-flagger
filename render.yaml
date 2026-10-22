@@ -1,10 +1,20 @@
 services:
   - type: web
     name: scam-flagger
-    env: python
+    env: docker
     plan: free
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.11.0
+      - key: SPRING_PROFILES_ACTIVE
+        value: mysql
+      - key: MYSQL_HOST
+        sync: false
+      - key: MYSQL_PORT
+        value: "3306"
+      - key: MYSQL_DATABASE
+        sync: false
+      - key: MYSQL_USER
+        sync: false
+      - key: MYSQL_PASSWORD
+        sync: false

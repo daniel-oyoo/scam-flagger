@@ -1,0 +1,28 @@
+CREATE TABLE IF NOT EXISTS users (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(80) NOT NULL UNIQUE,
+    email VARCHAR(254) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS websites (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    url VARCHAR(700) NOT NULL UNIQUE,
+    risk_score INTEGER NOT NULL,
+    flagged BOOLEAN NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_checked TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS reviews (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    website_id BIGINT NOT NULL,
+    rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
+    comment TEXT,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_reviews_user FOREIGN KEY (user_id) REFERENCES users (id),
+    CONSTRAINT fk_reviews_website FOREIGN KEY (website_id) REFERENCES websites (id),
+    INDEX idx_reviews_website_created (website_id, created_at)
+);
